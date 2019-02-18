@@ -56,6 +56,8 @@ namespace Client
 
             Console.WriteLine("-----");
 
+            System.Threading.Thread.Sleep(2000);
+            
             //5. due to app2 modify the cached value , 
             // app1 should read from distributed cache, app2 should read from local cache
 

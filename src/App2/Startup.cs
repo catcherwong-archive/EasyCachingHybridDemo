@@ -1,6 +1,8 @@
 ﻿namespace App2
 {
+    using EasyCaching.Bus.RabbitMQ;
     using EasyCaching.Bus.Redis;
+    using EasyCaching.Bus.CSRedis;
     using EasyCaching.Core;
     using EasyCaching.Core.Configurations;
     using EasyCaching.HybridCache;
@@ -38,12 +40,27 @@
                 option.UseHybrid(config =>
                 {
                     config.TopicName = "test-topic";
+                    ////rabbitmq bus should use route key
+                    //config.TopicName = "rmq.queue.undurable.easycaching.subscriber.*";
                     config.EnableLogging = true;
                 })
-                // use redis bus
-                .WithRedisBus(busConf =>
+                //// use redis bus
+                // .WithRedisBus(busConf =>
+                // {
+                //     busConf.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
+                // });
+                //// use csredis bus
+                //.WithCSRedisBus(busConf =>
+                //{
+                //    busConf.ConnectionStrings = new System.Collections.Generic.List<string>
+                //    {
+                //        "127.0.0.1:6379,defaultDatabase=13,poolsize=10"
+                //    };
+                //})
+                //use rabbitmq bus
+                .WithRabbitMQBus(busConf =>
                 {
-                    busConf.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
+                    busConf = new RabbitMQBusOptions();
                 });
             });
 
