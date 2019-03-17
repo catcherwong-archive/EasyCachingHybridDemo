@@ -44,6 +44,11 @@
                     //config.TopicName = "rmq.queue.undurable.easycaching.subscriber.*";
 
                     config.EnableLogging = true;
+
+                    // specify the local cache provider name after v0.5.4
+                    config.LocalCacheProviderName = "m1";
+                    // specify the distributed cache provider name after v0.5.4
+                    config.DistributedCacheProviderName = "myredis";
                 })
                 //// use redis bus
                 // .WithRedisBus(busConf =>
