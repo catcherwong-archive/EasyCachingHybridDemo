@@ -1,18 +1,17 @@
-﻿namespace App1
+﻿namespace App3
 {
     using EasyCaching.Bus.CSRedis;
-    using EasyCaching.Bus.Redis;
-    using EasyCaching.Bus.RabbitMQ;
     using EasyCaching.Core;
-    using EasyCaching.Core.Configurations;
+    using EasyCaching.CSRedis;
     using EasyCaching.HybridCache;
     using EasyCaching.InMemory;
-    using EasyCaching.Redis;
+    using EasyCaching.Interceptor.AspectCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using System;
 
     public class Startup
     {
@@ -23,56 +22,55 @@
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+
+            services.AddTransient<ITestService, TestService>();
+
             services.AddEasyCaching(option =>
             {
                 // local
                 option.UseInMemory("m1");
                 // distributed
-                option.UseRedis(config =>
+                option.UseCSRedis(config =>
                 {
-                    config.DBConfig.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
-                    config.DBConfig.Database = 5;
+                    config.DBConfig = new CSRedisDBOptions
+                    {
+                        ConnectionStrings = new System.Collections.Generic.List<string>
+                        {
+                            "127.0.0.1:6388,defaultDatabase=12,poolsize=10"
+                        }
+                    };
                 }, "myredis");
 
                 // combine local and distributed
                 option.UseHybrid(config =>
                 {
                     config.TopicName = "test-topic";
-                    ////rabbitmq bus should use route key
-                    //config.TopicName = "rmq.queue.undurable.easycaching.subscriber.*";
 
                     config.EnableLogging = true;
 
-                    // specify the local cache provider name after v0.5.4
                     config.LocalCacheProviderName = "m1";
-                    // specify the distributed cache provider name after v0.5.4
                     config.DistributedCacheProviderName = "myredis";
                 })
-                //// use redis bus
-                // .WithRedisBus(busConf =>
-                // {
-                //     busConf.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
-                // });
-                //// use csredis bus
-                //.WithCSRedisBus(busConf =>
-                //{
-                //    busConf.ConnectionStrings = new System.Collections.Generic.List<string>
-                //    {
-                //        "127.0.0.1:6379,defaultDatabase=13,poolsize=10"
-                //    };
-                //})
-                //use rabbitmq bus
-                .WithRabbitMQBus(busConf => 
+                .WithCSRedisBus(busConf =>
                 {
-                    busConf = new RabbitMQBusOptions();
+                    busConf.ConnectionStrings = new System.Collections.Generic.List<string>
+                    {
+                        "127.0.0.1:6379,defaultDatabase=13,poolsize=10"
+                    };
                 });
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-        }
 
+            return services.ConfigureAspectCoreInterceptor(options =>
+            {
+                // this is the default provider if you do not specify the provider name in the Attribute.
+                options.CacheProviderName = "myredis";
+            });
+        }
+        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
