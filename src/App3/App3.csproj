@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EasyCaching.CSRedis" Version="0.8.0" />
+    <PackageReference Include="EasyCaching.InMemory" Version="0.8.0" />
+    <PackageReference Include="EasyCaching.Interceptor.AspectCore" Version="0.8.0" />
+    <PackageReference Include="EasyCaching.Redis" Version="0.8.0" />
+    <PackageReference Include="EasyCaching.HybridCache" Version="0.8.0" />
+    <PackageReference Include="EasyCaching.Bus.Redis" Version="0.8.0" />
+    <PackageReference Include="EasyCaching.Bus.CSRedis" Version="0.8.0" />
+    <PackageReference Include="EasyCaching.Bus.RabbitMQ" Version="0.8.0" />
+  </ItemGroup>
+
+</Project>

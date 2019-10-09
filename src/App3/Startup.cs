@@ -1,17 +1,11 @@
 ﻿namespace App3
 {
-    using EasyCaching.Bus.CSRedis;
-    using EasyCaching.Core;
+    using AspectCore.Injector;
     using EasyCaching.CSRedis;
-    using EasyCaching.HybridCache;
-    using EasyCaching.InMemory;
     using EasyCaching.Interceptor.AspectCore;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
 
     public class Startup
     {
@@ -22,7 +16,7 @@
 
         public IConfiguration Configuration { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
 
             services.AddTransient<ITestService, TestService>();
@@ -62,23 +56,28 @@
                 });
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
 
-            return services.ConfigureAspectCoreInterceptor(options =>
+            services.ConfigureAspectCoreInterceptor(options =>
             {
                 // this is the default provider if you do not specify the provider name in the Attribute.
                 options.CacheProviderName = "myredis";
             });
         }
-        
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
 
-            app.UseMvc();
+        public void ConfigureContainer(IServiceContainer builder)
+        {
+            builder.ConfigureAspectCoreInterceptor();
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

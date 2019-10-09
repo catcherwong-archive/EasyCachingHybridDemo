@@ -1,16 +1,7 @@
 ﻿namespace App2
 {
-    using EasyCaching.Bus.RabbitMQ;
-    using EasyCaching.Bus.Redis;
-    using EasyCaching.Bus.CSRedis;
-    using EasyCaching.Core;
     using EasyCaching.Core.Configurations;
-    using EasyCaching.HybridCache;
-    using EasyCaching.InMemory;
-    using EasyCaching.Redis;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -47,12 +38,12 @@
                     config.LocalCacheProviderName = "m1";
                     // specify the distributed cache provider name after v0.5.4
                     config.DistributedCacheProviderName = "myredis";
-                })
-                //// use redis bus
-                // .WithRedisBus(busConf =>
-                // {
-                //     busConf.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
-                // });
+                }, "h1")
+                // use redis bus
+                 .WithRedisBus(busConf =>
+                 {
+                     busConf.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
+                 })
                 //// use csredis bus
                 //.WithCSRedisBus(busConf =>
                 //{
@@ -61,24 +52,25 @@
                 //        "127.0.0.1:6379,defaultDatabase=13,poolsize=10"
                 //    };
                 //})
-                //use rabbitmq bus
-                .WithRabbitMQBus(busConf =>
-                {
-                    busConf = new RabbitMQBusOptions();
-                });
+                ////use rabbitmq bus
+                //.WithRabbitMQBus(busConf =>
+                //{
+                //    busConf = new RabbitMQBusOptions();
+                //})
+                ;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseRouting();
 
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

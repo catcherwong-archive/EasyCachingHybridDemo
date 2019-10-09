@@ -11,9 +11,9 @@
     {
         private readonly IHybridCachingProvider _hybrid;
 
-        public ValuesController(IHybridCachingProvider hybrid)
+        public ValuesController(IHybridProviderFactory hybridFactory)
         {
-            this._hybrid = hybrid;
+            this._hybrid = hybridFactory.GetHybridCachingProvider("h1");
         }
 
         // GET api/values

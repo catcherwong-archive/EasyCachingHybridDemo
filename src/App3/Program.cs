@@ -1,4 +1,4 @@
-﻿namespace App2
+﻿namespace App3
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
@@ -15,7 +15,6 @@
                        .ConfigureWebHostDefaults(webBuilder =>
                        {
                            webBuilder
-                           .UseUrls("http://*:8891")
                            .UseStartup<Startup>();
                        })
                    ;
