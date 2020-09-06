@@ -1,5 +1,6 @@
 ﻿namespace App3
 {
+    using AspectCore.Extensions.Hosting;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
 
@@ -16,7 +17,9 @@
                        {
                            webBuilder
                            .UseStartup<Startup>();
-                       })
+                       })    
+                        // for aspcectcore
+                        .UseServiceContext()
                    ;
     }
 }

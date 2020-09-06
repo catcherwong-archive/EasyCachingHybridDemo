@@ -1,6 +1,5 @@
 ﻿namespace App3
 {
-    using AspectCore.Injector;
     using EasyCaching.CSRedis;
     using EasyCaching.Interceptor.AspectCore;
     using Microsoft.AspNetCore.Builder;
@@ -63,11 +62,6 @@
                 // this is the default provider if you do not specify the provider name in the Attribute.
                 options.CacheProviderName = "myredis";
             });
-        }
-
-        public void ConfigureContainer(IServiceContainer builder)
-        {
-            builder.ConfigureAspectCoreInterceptor();
         }
 
         public void Configure(IApplicationBuilder app)
