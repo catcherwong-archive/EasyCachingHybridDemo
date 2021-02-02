@@ -9,14 +9,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EasyCaching.CSRedis" Version="0.8.11" />
-    <PackageReference Include="EasyCaching.InMemory" Version="0.8.11" />
-    <PackageReference Include="EasyCaching.Interceptor.AspectCore" Version="0.8.11" />
-    <PackageReference Include="EasyCaching.Redis" Version="0.8.11" />
-    <PackageReference Include="EasyCaching.HybridCache" Version="0.8.11" />
-    <PackageReference Include="EasyCaching.Bus.Redis" Version="0.8.11" />
-    <PackageReference Include="EasyCaching.Bus.CSRedis" Version="0.8.11" />
-    <PackageReference Include="EasyCaching.Bus.RabbitMQ" Version="0.8.11" />
+    <PackageReference Include="EasyCaching.CSRedis" Version="1.2.0" />
+    <PackageReference Include="EasyCaching.InMemory" Version="1.2.0" />
+    <PackageReference Include="EasyCaching.Interceptor.AspectCore" Version="1.2.0" />
+    <PackageReference Include="EasyCaching.Redis" Version="1.2.0" />
+    <PackageReference Include="EasyCaching.HybridCache" Version="1.2.0" />
+    <PackageReference Include="EasyCaching.Bus.Redis" Version="1.2.0" />
+    <PackageReference Include="EasyCaching.Bus.CSRedis" Version="1.2.0" />
+    <PackageReference Include="EasyCaching.Bus.RabbitMQ" Version="1.2.0" />
     <PackageReference Include="AspectCore.Extensions.Hosting" Version="2.1.0" />
   </ItemGroup>
 
